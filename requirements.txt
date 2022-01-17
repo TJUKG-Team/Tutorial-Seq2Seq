@@ -1,0 +1,6 @@
+dill==0.3.4
+spacy==3.2.1
+tensorboardX==2.4.1
+torch==1.8.1
+torchtext==0.9.1
+tqdm==4.51.0
