@@ -13,6 +13,7 @@ class DailyDialog():
         # config path
         self.root_path = 'datasets/dailydialog'
         self.save_path = 'datasets/processed/dailydialog'
+        os.makedirs(f'{self.save_path}/json', exist_ok=True)
         self.save_dataset_path = {
             'train_dataset': f'{self.save_path}/train_dataset',
             'vaild_dataset': f'{self.save_path}/vaild_dataset',
@@ -78,9 +79,9 @@ class DailyDialog():
         train_txt = f'{self.root_path}/train/dialogues_train.txt'
         valid_txt = f'{self.root_path}/validation/dialogues_validation.txt'
         test_txt = f'{self.root_path}/test/dialogues_test.txt'
-        train_json = f'{self.root_path}/train.json'
-        valid_json = f'{self.root_path}/valid.json'
-        test_json = f'{self.root_path}/test.json'
+        train_json = f'{self.save_path}/json/train.json'
+        valid_json = f'{self.save_path}/json/valid.json'
+        test_json = f'{self.save_path}/json/test.json'
 
         def txt2json(txt_path, json_path):
             with open(json_path, 'w') as f_json:
@@ -101,7 +102,7 @@ class DailyDialog():
 
     def create_datasets(self, fields):
         train_dataset, vaild_dataset, test_dataset = data.TabularDataset.splits(
-            path=self.root_path,
+            path=f'{self.save_path}/json',
             train='train.json',
             validation='valid.json',
             test='test.json',
@@ -159,7 +160,7 @@ class DailyDialog():
     def get_Fields(self):
         return self.SRC, self.TRG
 
-    def get_tokens_indexes(self):
+    def get_sos_eos_indexes(self):
         tokens_indexes = [[self.TRG.vocab.stoi[self.TRG.init_token]], [self.TRG.vocab.stoi[self.TRG.eos_token]]]
         return torch.tensor(tokens_indexes)
 

@@ -10,9 +10,9 @@ def get_arguments():
     parser.add_argument('--dataset', type=str, default='DailyDialog')
     args, _ = parser.parse_known_args()
 
-    ckpt_path = f'checkpoints/{args.dataset}/{args.model_name}.pth'
-    args_path = f'checkpoints/{args.dataset}/arguments/{args.model_name}.yaml'
-    logs_dir = f'logs/{args.dataset}/{args.model_name}'
+    ckpt_path = f'checkpoints/{args.dataset}/{args.model_name}.pth'  # checkpoints保存路径
+    args_path = f'checkpoints/{args.dataset}/arguments/{args.model_name}.yaml'  # 参数保存路径
+    logs_dir = f'logs/{args.dataset}/{args.model_name}'  # logs保存路径
     parser = globals()[f'get_parser_{args.model_name}'](parser, ckpt_path, args_path, logs_dir)
     args = parser.parse_args()
 
@@ -29,9 +29,9 @@ def get_arguments():
     dataset = getattr(import_data, args.dataset)(args.batch_size, args.device)
     args.SRC, args.TRG = dataset.get_Fields()
     args.get_data_iterator = dataset.get_data_iterator
-    args.encode_src_sentence = dataset.encode_src_sentence
-    args.get_tokens_indexes = dataset.get_tokens_indexes
-    args.decode_trg_sentence = dataset.decode_trg_sentence
+    args.encode_src_sentence = dataset.encode_src_sentence  # seq2index
+    args.get_sos_eos_indexes = dataset.get_sos_eos_indexes  # 获取<sos>和<eos>的index
+    args.decode_trg_sentence = dataset.decode_trg_sentence  # index2seq
 
     # 导入模型
     import_model = importlib.import_module(f'models.{args.model_name}')

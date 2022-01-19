@@ -1,5 +1,4 @@
 import torch
-
 from Seq2Seq_config import get_arguments
 from utils.network import *
 
@@ -8,7 +7,7 @@ def inference(model, input_sentence):
     model.eval()
     with torch.no_grad():
         input_indexes = args.encode_src_sentence(input_sentence).to(args.device)  # [src_len, batch_size=1]
-        trg_indexes = args.get_tokens_indexes().to(args.device)  # [[stoi('<sos>')], [stoi('<eos>')]] = [[2], [3]]
+        trg_indexes = args.get_sos_eos_indexes().to(args.device)  # [[stoi('<sos>')], [stoi('<eos>')]] = [[2], [3]]
         output_indexes = model(input_indexes, trg_indexes)
         output_indexes = output_indexes.squeeze(1).argmax(1)  # [trg_len, batch_size=1, output_dim] → [trg_len]
         output_sentence = args.decode_trg_sentence(output_indexes)

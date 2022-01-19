@@ -1,6 +1,5 @@
 import torch
 import torch.nn as nn
-
 from Seq2Seq_config import get_arguments
 from utils.network import *
 

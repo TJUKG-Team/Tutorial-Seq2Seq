@@ -3,8 +3,6 @@ import torch.nn as nn
 import torch.optim as optim
 import math
 from tqdm import tqdm
-
-
 from Seq2Seq_config import get_arguments
 from utils.logger import Logger
 from utils.network import *
@@ -28,7 +26,7 @@ def train(model, iterator, optimizer, criterion, logger, epoch):
         # Backward and optimize
         optimizer.zero_grad()
         loss.backward()
-        # torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1)
+        # torch.nn.utils.clip_grad_norm_(get_trainable_parameters(model), max_norm=1)
         optimizer.step()
 
     return epoch_loss / len(iterator)
@@ -53,14 +51,13 @@ def valid(model, iterator, criterion, logger, epoch):
     return epoch_loss / len(iterator)
 
 
-def start_train(args, train_iterator, valid_iterator, model, init_parameters, optimizer, criterion):
+def start_train(args, train_iterator, valid_iterator, model, optimizer, criterion):
     # 是否使用checkpoint
     if not args.trian_from_zero:
         try:
             checkpoint = torch.load(args.ckpt_path)
         except FileNotFoundError:
             print(f'[*] The checkpoint file {args.ckpt_path} not exist, train start ...')
-            init_parameters(model, args)
             current_epoch = 0
             best_valid_loss = float('inf')
         else:
@@ -74,7 +71,6 @@ def start_train(args, train_iterator, valid_iterator, model, init_parameters, op
                 return
     else:
         print(f'[*] Train model from zero, train start ...')
-        init_parameters(model, args)
         current_epoch = 0
         best_valid_loss = float('inf')
 
@@ -96,6 +92,7 @@ def start_train(args, train_iterator, valid_iterator, model, init_parameters, op
         print(f'\t Val. Loss: {valid_loss:.3f} |  Val. PPL: {math.exp(valid_loss):7.3f}')
         logger.add_scalar('train_epoch_loss', train_loss, epoch)
         logger.add_scalar('valid_epoch_loss', valid_loss, epoch)
+        logger.save_trainable_parameters(model, epoch)
 
         if valid_loss < best_valid_loss:
             early_stopping_counter = 0
@@ -124,14 +121,14 @@ if __name__ == '__main__':
 
     # 构建模型
     model = args.network(args).to(args.device)
+
+    # 参数初始化
+    globals()[f'init_parameters_{args.model_name}'](model, args)
     print_network(model)
 
-    # 参数初始化函数
-    init_parameters = globals()[f'init_parameters_{args.model_name}']
-
     # 优化器与损失函数
-    optimizer = optim.Adam(model.parameters())
+    optimizer = optim.Adam(get_trainable_parameters(model))
     criterion = nn.CrossEntropyLoss(ignore_index=args.TRG.vocab.stoi[args.TRG.pad_token])
 
     # 训练模型
-    start_train(args, train_iterator, valid_iterator, model, init_parameters, optimizer, criterion)
+    start_train(args, train_iterator, valid_iterator, model, optimizer, criterion)

@@ -8,6 +8,10 @@ def print_network(model):
     print(f'The model has {parameters_num:,} trainable parameters.')
 
 
+def get_trainable_parameters(model):
+    return filter(lambda p: p.requires_grad, model.parameters())
+
+
 def get_init_emb_layers(dataset):
     init_emb_layers = []
     if dataset in ['Multi30k']:

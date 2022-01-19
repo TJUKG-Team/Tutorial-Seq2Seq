@@ -35,7 +35,7 @@ class Multi30k():
         self.TRG = data.Field(tokenize=self.tokenize_trg, init_token='<sos>', eos_token='<eos>', lower=True)
 
         # 构建dataset
-        if self.if_split_already():
+        if self.if_split_already():  # data.TabularDataset能够通过dataset.examples和fields重构出来
             fields = {'src': self.SRC, 'trg': self.TRG}
             self.train_dataset, self.valid_dataset, self.test_dataset = self.load_split_datasets(fields)
         else:
@@ -119,7 +119,7 @@ class Multi30k():
     def get_Fields(self):
         return self.SRC, self.TRG
 
-    def get_tokens_indexes(self):
+    def get_sos_eos_indexes(self):
         tokens_indexes = [[self.TRG.vocab.stoi[self.TRG.init_token]], [self.TRG.vocab.stoi[self.TRG.eos_token]]]
         return torch.tensor(tokens_indexes)
 

@@ -1,9 +1,10 @@
 # custom
 _*/
-checkpoints/*
+checkpoints/
 datasets/processed/*
 datasets/.vector_cache/
 logs/
+.vscode/
 !.gitkeep
 
 # Byte-compiled / optimized / DLL files
