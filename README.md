@@ -34,6 +34,7 @@
 
 ## 补充说明
 
+- 本项目比较重要的地方在于对数据流的整体把握，至于数据预处理的方法、预处理后的数据集是否一定要保存、是否使用动态加载等东西不是很重要其实，需要根据具体的情况去选择，比如在[Tutorial-WGAN](https://github.com/TJUKG-Team/Tutorial-WGAN)项目中，数据集的处理我就没有使用torchtext，而是用numpy写的（为了使iterator有更高的灵活性），因为是小数据集，数据预处理特别快，所以我也没有保存预处理后的数据，因为是临时用一次的项目，所以我也没有写成动态加载的方式
 - 因为本项目没有特别详细的注释，推荐先看看`assets/pytorch-seq2seq`中的notebook（只看第1个就行，流程上是一样的）
 - 如果觉得直接顺着代码读有困难的话，可以用debug模式，边运行边看每行命令有哪些影响
 - 项目的入口文件包含：`Seq2Seq_train.py`、`Seq2Seq_test.py`、`Seq2Seq_inference.py`
