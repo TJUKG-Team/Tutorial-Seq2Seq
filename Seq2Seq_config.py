@@ -45,7 +45,7 @@ def get_parser_common(parser, ckpt_path, args_path, logs_dir):
     parser.add_argument('--epochs', type=int, default=20)
     parser.add_argument('--batch_size', type=int, default=64)
     parser.add_argument('--use_cpu', action='store_true')
-    parser.add_argument('--trian_from_zero', action='store_true')
+    parser.add_argument('--train_from_zero', action='store_true')
     parser.add_argument('--ckpt_path', type=str, default=f'{ckpt_path}')
     parser.add_argument('--args_path', type=str, default=f'{args_path}')
     parser.add_argument('--logs_dir', type=str, default=f'{logs_dir}')

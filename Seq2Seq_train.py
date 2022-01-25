@@ -53,7 +53,7 @@ def valid(model, iterator, criterion, logger, epoch):
 
 def start_train(args, train_iterator, valid_iterator, model, optimizer, criterion):
     # 是否使用checkpoint
-    if not args.trian_from_zero:
+    if not args.train_from_zero:
         try:
             checkpoint = torch.load(args.ckpt_path)
         except FileNotFoundError:
