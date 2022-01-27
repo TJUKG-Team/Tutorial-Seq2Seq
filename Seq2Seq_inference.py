@@ -23,10 +23,6 @@ def start_inference(args, model):
         print(f'[*] Load model from {args.ckpt_path}, inference start ...')
         model.load_state_dict(checkpoint['model'])
         while True:
-            # ein schwarzer hund und ein gefleckter hund kämpfen. --> a black dog and a spotted dog are fighting
-            # Ein Hund rennt im Schnee. --> A dog is running in the snow
-            # eine frau spielt ein lied auf ihrer geige --> a female playing a song on her violin
-            # die person im gestreiften shirt klettert auf einen berg --> the person in the striped shirt is mountain climbing
             input_sentence = input('source sentence: ')
             if input_sentence == 'exit':
                 break
